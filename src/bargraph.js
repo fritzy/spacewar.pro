@@ -7,7 +7,7 @@ class Bargraph {
         this.sprite = new Pixi.Graphics();
         this.sprite.position.set(x, y);
         this.game = game;
-        this.game.app.stage.addChild(this.sprite);
+        this.game.stage.addChild(this.sprite);
     }
 
     draw(width) {
@@ -15,7 +15,7 @@ class Bargraph {
         width *= 3;
         this.sprite.clear();
         this.sprite.beginFill(0xFFFFFF);
-        this.sprite.drawRect(0, 0, width, 16);
+        this.sprite.drawRect(0, 4, width, 8);
     }
 }
 

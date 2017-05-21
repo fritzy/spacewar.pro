@@ -6,7 +6,7 @@ class Starfield {
 
         this.game = game;
         this.stars = new Pixi.Graphics();
-        this.game.app.stage.addChild(this.stars);
+        this.game.stage.addChild(this.stars);
         this.stars.lineStyle(1, 0xFFFFFF);
 
         for (let i = 0; i < 150; i++) {
