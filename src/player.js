@@ -68,8 +68,8 @@ class Player {
       Body.applyForce(
         this.ship.body, body.position,
         Vector.create(
-          Math.sin(body.angle) * du * .0003,
-          Math.cos(body.angle) * du * -.0003
+          Math.sin(body.angle) * du * .0006,
+          Math.cos(body.angle) * du * -.0006
         )
       );
     }

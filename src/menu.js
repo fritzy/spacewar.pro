@@ -57,7 +57,7 @@ class Menu extends Scene {
     this.settings = {
       gravity: window.localStorage.getItem('sw_gravity') === "true" ? true : false,
       planet: window.localStorage.getItem('sw_planet') === "false" ? false : true,
-      mseek: window.localStorage.getItem('sw_mseek') === "true" ? true : false
+      mseek: window.localStorage.getItem('sw_mseek') === "false" ? false : true
     };
 
     this.plans.renderable = this.settings.planet;
