@@ -67,6 +67,9 @@ class Missile extends Thing {
       this.destruct();
       return;
     }
+    if (!this.game.settings.mseek) {
+      return;
+    }
     const mpos = this.body.position;
     let tpos = this.target.body.position;
 

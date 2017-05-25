@@ -34,6 +34,14 @@ class Menu extends Scene {
     this.planb.interactive = true;
     this.planb.hitArea = new Pixi.Rectangle(0, 0, 17, 17);
 
+    this.missb = new Pixi.Graphics();
+    this.missb.lineStyle(2, 0xFFFFFF);
+    this.missb.drawRect(0, 0, 17, 17);
+    this.missb.position.set(525, 444);
+    this.stage.addChild(this.missb);
+    this.missb.interactive = true;
+    this.missb.hitArea = new Pixi.Rectangle(0, 0, 17, 17);
+
     this.plans = new Pixi.Sprite(this.resources.check.texture);
     this.plans.position.set(524, 420);
     this.stage.addChild(this.plans);
@@ -42,21 +50,40 @@ class Menu extends Scene {
     this.gravs.position.set(524, 396);
     this.stage.addChild(this.gravs);
 
+    this.misss = new Pixi.Sprite(this.resources.check.texture);
+    this.misss.position.set(524, 444);
+    this.stage.addChild(this.misss);
+
     this.settings = {
-      gravity: true,
-      planet: true
+      gravity: window.localStorage.getItem('sw_gravity') === "true" ? true : false,
+      planet: window.localStorage.getItem('sw_planet') === "false" ? false : true,
+      mseek: window.localStorage.getItem('sw_mseek') === "true" ? true : false
     };
+
+    this.plans.renderable = this.settings.planet;
+    this.gravs.renderable = this.settings.gravity;
+    this.misss.renderable = this.settings.mseek;
 
     this.gravb.on('mousedown', () => {
 
       this.settings.gravity = !this.settings.gravity;
+      window.localStorage.setItem('sw_gravity', this.settings.gravity);
       this.gravs.renderable = this.settings.gravity;
     });
+
 
     this.planb.on('mousedown', () => {
 
       this.settings.planet = !this.settings.planet;
+      window.localStorage.setItem('sw_planet', this.settings.planet);
       this.plans.renderable = this.settings.planet;
+    });
+
+    this.missb.on('mousedown', () => {
+
+      this.settings.mseek = !this.settings.mseek;
+      window.localStorage.setItem('sw_mseek', this.settings.mseek);
+      this.misss.renderable = this.settings.mseek;
     });
 
     this.startb.on('mousedown', () => {
