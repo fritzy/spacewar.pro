@@ -20,18 +20,16 @@ class Particle {
     this.life = life || 30;
     this.destroyed = false;
     
-    this.game.app.ticker.add(this.update, this);
   }
 
-  update(delta) {
+  update(dt, du) {
 
-    this.life -= delta;
+    this.life -= du;
     if (this.life < 0) {
-      console.log('end it')
       return this.destroy();
     }
     this.sprite.position.set(this.pos.x, this.pos.y);
-    this.pos = Matter.Vector.add(this.pos, Matter.Vector.mult(this.vel, delta));
+    this.pos = Matter.Vector.add(this.pos, Matter.Vector.mult(this.vel, du));
   }
 
   destroy() {
@@ -40,9 +38,9 @@ class Particle {
       return;
     }
     this.destroyed = true;
-    this.game.app.ticker.remove(this.update, this);
     this.sprite.destroy();
     this.game.particles.splice(this.game.particles.indexOf(this), 1);
+    delete this.game;
   }
 
 }

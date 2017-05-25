@@ -93,6 +93,9 @@ class Menu extends Scene {
 
 
   }
+
+  update() {
+  }
 }
 
 module.exports = Menu;

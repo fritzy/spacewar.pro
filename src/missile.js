@@ -57,12 +57,15 @@ class Missile extends Thing {
     this.tsprite.renderable = false;
     this.game.stage.addChild(this.tsprite);
 
-    this.game.app.ticker.add(this.update, this);
   }
 
-  update (delta) {
+  update (dt, du) {
 
-    this.life += this.game.app.ticker.elapsedMS;
+    super.update();
+    if (this.destroyed) {
+      return;
+    }
+    this.life += dt;
     if (this.life > 10000) {
       this.destruct();
       return;
@@ -84,7 +87,7 @@ class Missile extends Thing {
       tpos = Matter.Vector.sub(Matter.Vector.add(this.target.body.position, Matter.Vector.mult(this.target.body.velocity, dist / 5)), Matter.Vector.mult(this.body.velocity, dist / 5));
       this.tsprite.position.set(tpos.x, tpos.y);
       let a = Matter.Vector.angle(tpos, mpos);
-      
+
       let diff = a - this.body.angle - HPI;
       if (diff > PI) {
         diff -= PI2;
@@ -93,22 +96,22 @@ class Missile extends Thing {
       }
 
       if (diff > 0) {
-        Matter.Body.setAngle(this.body, this.body.angle + .05);
+        Matter.Body.setAngle(this.body, this.body.angle + .05 * du);
       } else if (diff < 0) {
-        Matter.Body.setAngle(this.body, this.body.angle - .05);
+        Matter.Body.setAngle(this.body, this.body.angle - .05 * du);
       }
-      
+
       if (Math.abs(diff) > 1) {
         return;
       }
 
       //Matter.Body.setAngle(this.body, (this.body.angle + diff) % PI);
       a = this.body.angle + HPI;
-      let v = Matter.Vector.create(Math.cos(a) * -.00013 * delta, Math.sin(a) * -.00013 * delta);
+      let v = Matter.Vector.create(Math.cos(a) * -.0005 * du, Math.sin(a) * -.0005 * du);
       Matter.Body.applyForce(this.body,
         this.body.position,
         v);
-       
+
       let pvel = Matter.Vector.create(Math.cos(a), Math.sin(a));
       pvel = Matter.Vector.mult(pvel, 1 + Math.random() * 3);
       pvel = Matter.Vector.add(pvel, this.body.velocity);
@@ -138,15 +141,11 @@ class Missile extends Thing {
 
     this.tsprite.destroy();
     this.ship.missiles.splice(this.ship.missiles.indexOf(this), 1);
-    this.game.app.ticker.remove(this.update, this);
-    delete this.target;
-    delete this.ship;
-    delete this.game;
   }
 
   collide(other) {
 
-    if (other.type !== 'MISSILE') {
+    if (other.type !== 'MISSILE' && other.type !== 'BEAM') {
       super.collide(other);
       this.destruct();
     }

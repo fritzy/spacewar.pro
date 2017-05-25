@@ -15,11 +15,13 @@ class Thing {
     this.game.stage.addChild(this.sprite);
     Matter.World.add(this.game.engine.world, [body]);
 
-    this.game.app.ticker.add(this.updatePos, this);
   }
    
-  updatePos() {
+  update() {
 
+    if (this.destroyed) {
+      return;
+    }
     if (this.body.position.x > this.game.width) {
       Matter.Body.setPosition(this.body, Matter.Vector.create(0, this.body.position.y));
     } else if (this.body.position.x < 0) {
@@ -36,7 +38,6 @@ class Thing {
 
   destruct() {
 
-    this.game.app.ticker.remove(this.updatePos, this);
     Matter.World.remove(this.game.engine.world, [this.body]);
     this.game.stage.removeChild(this.sprite);
     this.destroyed = true;

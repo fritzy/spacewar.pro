@@ -46,11 +46,11 @@ class Beam extends Thing {
         Matter.Body.scale(this.body, 2, 2);
         
         this.life = 0;
-        this.game.app.ticker.add(this.update, this);
     }
     
-    update() {
-        const dt = this.game.app.ticker.elapsedMS;
+    update(dt, du) {
+
+        super.update(dt, du);
         this.sprite.scale.set(this.sprite.scale.x + .003 * dt);
         Matter.Body.scale(this.body, 1 + (.003 * dt / 2), 1 + (.003 * dt / 2));
         this.life += dt;
@@ -62,8 +62,7 @@ class Beam extends Thing {
     destruct() {
 
         super.destruct();
-        this.ship.missiles.splice(this.ship.missiles.indexOf(this), 1);
-        this.game.app.ticker.remove(this.update, this);
+        this.ship.beam = null;
     }
 
     collide(other) {

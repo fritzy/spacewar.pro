@@ -7,10 +7,9 @@ class Speedcap {
     this.game = game;
     this.speed = speed;
     this.mspeed = mspeed;
-    this.game.app.ticker.add(this.update, this);
   }
 
-  update(delta) {
+  update(dt, du) {
 
     const bodies = Matter.Composite.allBodies(this.game.engine.world);
     for (let body of bodies) {
@@ -28,7 +27,6 @@ class Speedcap {
 
   destruct () {
 
-    this.game.app.ticker.remove(this.update, this);
     delete this.game;
   }
 

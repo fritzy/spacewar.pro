@@ -44,12 +44,14 @@ class Ship extends Thing {
     this.beam = null;
     this.left = left;
 
-    this.game.app.ticker.add(this.update, this);
   }
   
-  update() {
+  update(dt, du) {
 
-    const dt = this.game.app.ticker.elapsedMS;
+    super.update();
+    if (this.destroyed) {
+      return;
+    }
     this.lastEnergyBump += dt;
     if (this.lastEnergyBump >= 1000) {
       this.lastEnergyBump = 0;
@@ -60,6 +62,12 @@ class Ship extends Thing {
         this.shield += 1;
         this.shieldGraph.draw(this.shield);
       }
+    }
+    for (let i = this.missiles.length - 1; i >= 0; i--) {
+      this.missiles[i].update(dt, du);
+    }
+    if (this.beam !== null) {
+        this.beam.update(dt, du);
     }
   }
 
@@ -84,7 +92,6 @@ class Ship extends Thing {
 
   destruct(boom) {
 
-    this.game.app.ticker.remove(this.update, this);
     if (boom) {
       let i = 0;
       let pos = Matter.Vector.clone(this.body.position);
@@ -104,6 +111,8 @@ class Ship extends Thing {
     }
 
     super.destruct();
+    this.missiles = [];;
+    
   }
 
   adjust(dir) {

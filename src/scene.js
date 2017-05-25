@@ -16,6 +16,10 @@ class Scene {
 
     this.stage.destroy();
   }
+
+  update(dt) {
+
+  }
 }
 
 module.exports = Scene;
