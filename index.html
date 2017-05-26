@@ -2,14 +2,10 @@
     <head>
 <style>
 #container {
+  margin: 0;
   padding: 0;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
   width: 800px;
   height: 600px;
-  position: absolute;
   z-index: 1;
 }
 canvas {
@@ -19,24 +15,73 @@ canvas {
   width: 100%;
   height: 100%;
 }
-#command {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 25%;
-  height: 25%;
-  z-index: 10;
-}
 body {
   margin: 0;
-  overflow: none;
+  background-color: 000;
+}
+#layout {
+  margin: auto;
+  width: 800px;
+  border: 3px solid green;
+  padding: 0px;
+}
+#desc {
+  box-sizing: border-box;
+  width: 100%;
+  border-top: 3px solid green;
+  color: white;
+  left: -3px;
+  padding: 5px;
+}
+table {
+  color: white;
+}
+table, th, td {
+    border: 2px solid white;
+    padding: 5px;
+    border-collapse: collapse;
+    text-align: center;
+}
+p, th, td, li, h2 {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14pt;
+  color: white;
+}
+a {
+  color: green;
 }
 </style>
     </head>
     <body>
-        <div id='container'>
-        </div>
-        <div id='command'>
+        <div id='layout'>
+            <div id='container'>
+            </div>
+            <div id='desc'>
+              <p>SpaceWar is a 2 player game with a long history, starting back to the <a href="https://en.wikipedia.org/wiki/Spacewar!">first graphical computer game</a>. This homage is similar to the DOS version by Bill Seiler. You can still <a href="https://archive.org/details/SPACEWAR_1020">play his version on archive.org</a></p>
+              <table>
+              <th>Action</th>
+              <th colspan="1">Left Controls</th>
+              <th colspan="1">Right Controls</th>
+              <tr><td>Thrust</td><td>W</td><td>Num8, I</td></tr>
+              <tr><td>Left</td><td>A</td><td>Num4, J</td></tr>
+              <tr><td>Right</td><td>D</td><td>Num6, L</td></tr>
+              <tr><td>Missile</td><td>S</td><td>Num5, K</td></tr>
+              <tr><td>Beam</td><td>C</td><td>Num1, M</td></tr>
+              <tr><td>More Shield</td><td>Q</td><td>Num7, U</td></tr>
+              <tr><td>More Energy</td><td>E</td><td>Num9, O</td></tr>
+              </table>
+              <h2>To Dos:</h2>
+              <ul>
+                <li>Warp</li>
+                <li>Cloak</li>
+                <li>Sounds</li>
+                <li>AI</li>
+                <li>Balancing</li>
+                <li>Make menu more interesting</li>
+              </ul>
+              <p> Send feedback to <a href="mailto:nathanfritz@gmail.com">nathanfritz@gmail.com</a> or Twitter <a href="https://twitter.com/fritzy">@fritzy</a>.</p>
+              <p>Special thanks to <a href="https://www.patreon.com/somepx">Evee Somepx</a> for the title font and to Athena Fritz for putting up with my tinkering.</p>
+            </div>
         </div>
         <script src='out.js'></script>
     </body>
