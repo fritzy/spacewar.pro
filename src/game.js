@@ -79,7 +79,7 @@ class Game extends Scene {
     if (this.settings.planet) {
       this.moon = new Moon(this);
     }
-    this.speedcap = new Speedcap(this, 12, 30);
+    this.speedcap = new Speedcap(this, 10, 14);
   }
 
   end() {
@@ -90,7 +90,6 @@ class Game extends Scene {
 
   update(dt, du) {
 
-    //console.log(dt, du);
     this.player.update(dt, du);
     this.player2.update(dt, du);
     this.ship.update(dt, du);

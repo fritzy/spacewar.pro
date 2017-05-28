@@ -12,7 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "matter-js": "^0.12.0",
-    "pixi.js": "^4.5.1",
+    "pixi.js": "^4.5.2"
+  },
+  "devDependencies": {
+    "babili-webpack-plugin": "^0.1.1",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
   }

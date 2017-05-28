@@ -13,7 +13,7 @@ class Speedcap {
 
     const bodies = Matter.Composite.allBodies(this.game.engine.world);
     for (let body of bodies) {
-      if (body.type === 'MISSILE') {
+      if (body.thing.type === 'MISSILE') {
         if (body.speed > this.mspeed) {
           Matter.Body.setVelocity(body, Matter.Vector.mult(body.velocity, .95));
         }

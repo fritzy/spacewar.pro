@@ -32,7 +32,6 @@ class Player {
 
     this.up = (e) => {
 
-
       const action = this.controls[e.key] || this.controls[e.code];
       if (action) {
         delete this.keys[action];
@@ -42,7 +41,6 @@ class Player {
 
     window.addEventListener('keydown', this.down, true);
     window.addEventListener('keyup', this.up, true);
-
   }
 
   update(dt, du) {
@@ -74,12 +72,12 @@ class Player {
       );
     }
     if (this.keys.left && this.ship.energy >= 1) {
-      Body.rotate(body, -.05);
+      Body.rotate(body, -.075 * du);
       Body.setAngularVelocity(body, 0);
     }
     if (this.keys.right && this.ship.energy >= 1) {
       Body.setAngularVelocity(body, 0);
-      Body.rotate(body, .05);
+      Body.rotate(body, .075 * du);
     }
   }
 

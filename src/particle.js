@@ -3,9 +3,13 @@ const Pixi = require('pixi.js');
 
 class Particle {
 
-  constructor(game, pos, vel, life) {
+  constructor(game, pos, vel, life, color) {
 
     const av = Math.random();
+    if (Array.isArray(color)) {
+      color = color[Math.floor(Math.random() * color.length)];
+    }
+    color = color || 0xFFFFFF;
 
     this.pos = pos;
     this.vel = vel;
@@ -13,7 +17,7 @@ class Particle {
     this.game = game;
 
     this.sprite = new Pixi.Graphics();
-    this.sprite.beginFill(0xFFFFFF);
+    this.sprite.beginFill(color);
     this.sprite.drawRect(-1.5, -1.5, 3, 3)
     this.game.stage.addChild(this.sprite);
     this.game.particles.push(this);

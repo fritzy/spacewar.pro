@@ -4,77 +4,68 @@ const Pixi = require('pixi.js');
 
 class Beam extends Thing {
 
-    constructor(game, ship) {
+  constructor(game, ship) {
 
-        const sprite = new Pixi.Graphics();
-        sprite.lineStyle(2, 0xFFFFFF);
-        sprite.arc(0, 0, 16, -Math.PI, 0);
+    const sprite = new Pixi.Graphics();
+    sprite.lineStyle(2, ship.color);
+    sprite.arc(0, 0, 16, -Math.PI, 0);
 
-        //sprite.scale.set(2);
-        //sprite.anchor.set(.5);
 
-        let pos = Matter.Vector.clone(ship.body.position);
-        /*
-        pos = Matter.Vector.add(
-            pos,
-            Matter.Vector.create(
-                Math.sin(ship.body.angle) * 24,
-                Math.cos(ship.body.angle) * -24
-            )
-        );
-        */
-        const body = Matter.Bodies.circle(pos.x, pos.y, 7,
-            {
-                angle: ship.body.angle,
-                frictionAir: 0,
-                frictionStatic: 0,
-                isSensor: true
-            });
-        Matter.Body.setVelocity(body,
-            Matter.Vector.add(
-                ship.body.velocity,
-                Matter.Vector.create(
-                    Math.sin(ship.body.angle) * 5,
-                    Math.cos(ship.body.angle) * -5,
-                )));
+    let pos = Matter.Vector.clone(ship.body.position);
+    const body = Matter.Bodies.circle(pos.x, pos.y, 7,
+      {
+        angle: ship.body.angle,
+        frictionAir: 0,
+        frictionStatic: 0,
+        isSensor: true
+      });
+    Matter.Body.setVelocity(body,
+      Matter.Vector.add(
+        ship.body.velocity,
+        Matter.Vector.create(
+          Math.sin(ship.body.angle) * 5,
+          Math.cos(ship.body.angle) * -5,
+        )));
 
-        super(game, body, sprite, 'BEAM');
-        this.game = game;
-        this.ship = ship;
-        this.body = body;
-        this.sprite = sprite;
-        Matter.Body.scale(this.body, 2, 2);
-        
-        this.life = 0;
-    }
+    super(game, body, sprite, 'BEAM');
+    this.game = game;
+    this.ship = ship;
+    this.body = body;
+    this.sprite = sprite;
+    this.color = this.ship.color;
+    Matter.Body.scale(this.body, 2, 2);
     
-    update(dt, du) {
+    this.life = 0;
+  }
+  
+  update(dt, du) {
 
-        super.update(dt, du);
-        this.sprite.scale.set(this.sprite.scale.x + .003 * dt);
-        Matter.Body.scale(this.body, 1 + (.003 * dt / 2), 1 + (.003 * dt / 2));
-        this.life += dt;
-        if (this.life > 300) {
-            this.destruct();
-        }
+    super.update(dt, du);
+    this.sprite.scale.set(this.sprite.scale.x + .003 * dt);
+    Matter.Body.scale(this.body, 1 + (.003 * dt / 2), 1 + (.003 * dt / 2));
+    this.life += dt;
+    if (this.life > 300) {
+      this.destruct();
     }
+  }
 
-    destruct() {
+  destruct() {
 
-        super.destruct();
-        this.ship.beam = null;
+    super.destruct();
+    this.ship.beam = null;
+  }
+
+  collide(other) {
+
+    super.collide(other);
+    if (other.type === 'SHIP' && other !== this.ship) {
+      other.damage(8);
+      this.destruct();
+    } else if (other.type === 'MISSILE') {
+      other.destruct();
+      other.blowUp([this.color, other.color]);
     }
-
-    collide(other) {
-
-        super.collide(other);
-        if (other.type === 'SHIP' && other !== this.ship) {
-            other.damage(8);
-            this.destruct();
-        } else if (other.type === 'MISSILE') {
-            other.destruct();
-        }
-    }
+  }
 }
 
 module.exports = Beam;

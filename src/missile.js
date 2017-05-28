@@ -57,6 +57,12 @@ class Missile extends Thing {
     this.tsprite.renderable = false;
     this.game.stage.addChild(this.tsprite);
 
+    if (this.ship.left) {
+      this.sprite.tint = this.game.settings.scolors[0];
+    } else {
+      this.sprite.tint = this.game.settings.scolors[1];
+    }
+    this.color = this.sprite.tint;
   }
 
   update (dt, du) {
@@ -68,6 +74,7 @@ class Missile extends Thing {
     this.life += dt;
     if (this.life > 10000) {
       this.destruct();
+      this.blowUp(this.color);
       return;
     }
     if (!this.game.settings.mseek) {
@@ -116,28 +123,27 @@ class Missile extends Thing {
       pvel = Matter.Vector.mult(pvel, 1 + Math.random() * 3);
       pvel = Matter.Vector.add(pvel, this.body.velocity);
 
-      new Particle(this.game, Matter.Vector.clone(this.body.position), pvel, 10);
+      new Particle(this.game, Matter.Vector.clone(this.body.position), pvel, 10, this.color);
     }
-
   }
 
-  destruct(quiet) {
+  blowUp(colors) {
 
-    let pos = Matter.Vector.clone(this.body.position);
     let vel = Matter.Vector.clone(this.body.velocity);
+    let pos = Matter.Vector.clone(this.body.position);
+    let i = 0;
+    do {
+      i++;
+      let a = Math.random() * PI2 - PI;
+      let f = .4 + Math.random() * 2;
+      let pvel = Matter.Vector.add(vel, Matter.Vector.create(Math.cos(a) * f, Math.sin(a) * f));
+      new Particle(this.game, pos, pvel, 15 + Math.random() * 30, colors);
+    } while (i < 30);
+  }
+
+  destruct() {
+
     super.destruct();
-
-    if (!quiet) {
-      let i = 0;
-      do {
-
-        i++;
-        let a = Math.random() * PI2 - PI;
-        let f = .4 + Math.random() * 2;
-        let pvel = Matter.Vector.add(vel, Matter.Vector.create(Math.cos(a) * f, Math.sin(a) * f));
-        new Particle(this.game, pos, pvel, 15 + Math.random() * 30);
-      } while (i < 30);
-    }
 
     this.tsprite.destroy();
     this.ship.missiles.splice(this.ship.missiles.indexOf(this), 1);
@@ -148,6 +154,7 @@ class Missile extends Thing {
     if (other.type !== 'MISSILE' && other.type !== 'BEAM') {
       super.collide(other);
       this.destruct();
+      this.blowUp([this.color, other.color]);
     }
   }
 }

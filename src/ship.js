@@ -43,6 +43,12 @@ class Ship extends Thing {
     this.game.stage.addChild(this.shieldIcon);
     this.beam = null;
     this.left = left;
+    if (this.left) {
+      this.sprite.tint = this.game.settings.scolors[0];
+    } else {
+      this.sprite.tint = this.game.settings.scolors[1];
+    }
+    this.color = this.sprite.tint;
 
   }
   
@@ -101,7 +107,7 @@ class Ship extends Thing {
         let a = Math.random() * PI2 - PI;
         let f = .4 + Math.random() * 4;
         let pvel = Matter.Vector.add(vel, Matter.Vector.create(Math.cos(a) * f, Math.sin(a) * f));
-        new Particle(this.game, pos, pvel, 20 + Math.random() * 50);
+        new Particle(this.game, pos, pvel, 20 + Math.random() * 50, this.color);
       } while (i < 100);
       this.game.end();
     }
