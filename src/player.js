@@ -14,18 +14,19 @@ class Player {
 
     this.down = (e) => {
 
-      if (this.keys[e.key]) {
+      const action = this.controls[e.key] || this.controls[e.code];
+      if (this.keys[action]) {
         return false;
       }
-      const action = this.controls[e.key] || this.controls[e.code];
       if (action) {
         this.keys[action] = true;
         this.held[action] = 0;
         if (action === 'missile' && this.ship.energy >= 2) {
           this.ship.fireMissile();
-        }
-        if (action === 'laser' && this.ship.energy >= 4) {
+        } else if (action === 'laser' && this.ship.energy >= 4) {
           this.ship.fireBeam();
+        } else if (action === 'cloak' && this.ship.energy >= 4) {
+          this.ship.cloak();
         }
       }
     }
@@ -35,6 +36,9 @@ class Player {
       const action = this.controls[e.key] || this.controls[e.code];
       if (action) {
         delete this.keys[action];
+        if (action === 'cloak') {
+          this.ship.unCloak();
+        }
       }
     };
 

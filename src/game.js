@@ -47,6 +47,8 @@ class Game extends Scene {
         q: 'addshield',
         e: 'addenergy',
         c: 'laser',
+        x: 'cloak',
+        z: 'warp'
       });
     this.ship2 = new Ship(this, 'ship2', this.width - 100, this.height / 2);
     this.player2 = new Player(this, this.ship2,
@@ -58,13 +60,17 @@ class Game extends Scene {
         u: 'addshield',
         o: 'addenergy',
         m: 'laser',
+        ',': 'cloak',
+        '.': 'warp',
         Numpad7: 'addshield',
         Numpad8: 'thrust',
         Numpad9: 'addenergy',
         Numpad4: 'left',
         Numpad5: 'missile',
         Numpad6: 'right',
-        Numpad1: 'laser'
+        Numpad1: 'laser',
+        Numpad2: 'cloak',
+        Numpad3: 'warp'
       });
 
 

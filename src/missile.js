@@ -90,7 +90,7 @@ class Missile extends Thing {
     } else if (this.body.angle < -PI) {
       Matter.Body.setAngle(this.body, this.body.angle + PI2);
     }
-    if (dist < 300) {
+    if (dist < 300 && !this.target.cloaking && !this.target.destroyed) {
       tpos = Matter.Vector.sub(Matter.Vector.add(this.target.body.position, Matter.Vector.mult(this.target.body.velocity, dist / 5)), Matter.Vector.mult(this.body.velocity, dist / 5));
       this.tsprite.position.set(tpos.x, tpos.y);
       let a = Matter.Vector.angle(tpos, mpos);

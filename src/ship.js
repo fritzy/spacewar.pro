@@ -27,6 +27,8 @@ class Ship extends Thing {
     this.game = game;
 
     this.shield = 30;
+    this.cloaking = false;
+    this.cloakTime = 0;
     this.energy = 30;
     this.shieldIcon = new Pixi.Sprite.fromFrame('kosov-s');
     this.shieldIcon.position.set(left ? 5 : this.game.width - 115, 6);
@@ -69,12 +71,37 @@ class Ship extends Thing {
         this.shieldGraph.draw(this.shield);
       }
     }
+    if (this.cloaking) {
+      if (this.energy < 1) {
+        this.unCloak();
+      } else {
+        this.cloakTime += dt;
+        if (this.cloakTime >= 500) {
+          this.cloakTime = 0;
+          this.useEnergy(1);
+        }
+      }
+    }
     for (let i = this.missiles.length - 1; i >= 0; i--) {
       this.missiles[i].update(dt, du);
     }
     if (this.beam !== null) {
         this.beam.update(dt, du);
     }
+  }
+
+  cloak() {
+
+    this.cloaking = true;
+    this.cloakTime = 0;
+    this.sprite.tint = 0x000000;
+    this.useEnergy(4);
+  }
+
+  unCloak() {
+
+    this.cloaking = false;
+    this.sprite.tint = this.color;
   }
 
   thrust() {
