@@ -2,6 +2,7 @@ const Pixi = require('pixi.js');
 const Game = require('./src/game.js');
 const Menu = require('./src/menu.js');
 const Matter = require('matter-js');
+const Tween = require('tween.js');
 
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST;
 const FMS = 1000/60;
@@ -48,6 +49,7 @@ class SpaceWarz {
 
   update(t) {
 
+    Tween.update(t);
     let dt = (t - this.lastTime);
     if (dt > 25) dt = 25;
     const du = dt / (FMS);

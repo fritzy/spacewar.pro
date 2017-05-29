@@ -9,6 +9,7 @@ const Particle = require('./particle');
 const PI2 = Math.PI * 2;
 const PI = Math.PI;
 const HPI = Math.PI / 2;
+const Tween = require('tween.js');
 
 class Ship extends Thing {
 
@@ -18,7 +19,7 @@ class Ship extends Thing {
     const body = Matter.Bodies.circle(x, y, 12, {
       frictionAir: 0,
       frictionStatic: 0,
-      density: .005
+      density: .005,
     });
     sprite.anchor.set(.5);
     sprite.scale.set(1.5);
@@ -28,6 +29,8 @@ class Ship extends Thing {
 
     this.shield = 30;
     this.cloaking = false;
+    this.warping = false;
+    this.warpTime = 0;
     this.cloakTime = 0;
     this.energy = 30;
     this.shieldIcon = new Pixi.Sprite.fromFrame('kosov-s');
@@ -90,12 +93,16 @@ class Ship extends Thing {
     }
   }
 
-  cloak() {
+  cloakToggle() {
 
-    this.cloaking = true;
-    this.cloakTime = 0;
-    this.sprite.tint = 0x000000;
-    this.useEnergy(4);
+    this.cloaking = !this.cloaking;
+    if (this.cloaking) {
+      this.cloakTime = 0;
+      this.sprite.tint = 0x000000;
+      this.useEnergy(4);
+    } else {
+      this.unCloak();
+    }
   }
 
   unCloak() {
@@ -106,12 +113,72 @@ class Ship extends Thing {
 
   thrust() {
   }
+
+  warp() {
+
+    if (this.warping) return;
+    this.useEnergy(2);
+    Matter.World.remove(this.game.engine.world, [this.body]);
+    this.warping = true;
+    //this.sprite.scale.set(1.5, 14);
+    this.sprite.anchor.set(.5, 0);
+    Matter.Body.setVelocity(this.body, Matter.Vector.create(0, 0));
+    Matter.Body.setAngularVelocity(this.body, 0);
+    let pos1 = Matter.Vector.clone(this.body.position);
+    pos1 = Matter.Vector.add(
+      pos1,
+      Matter.Vector.create(
+        Math.sin(this.body.angle) * 100,
+        Math.cos(this.body.angle) * -100
+      )
+    );
+    let pos2 = Matter.Vector.clone(this.body.position);
+    pos2 = Matter.Vector.add(
+      pos2,
+      Matter.Vector.create(
+        Math.sin(this.body.angle) * 200,
+        Math.cos(this.body.angle) * -200
+      )
+    );
+    const ship = this;
+    const anim = new Tween.Tween({x: ship.body.position.x, y: ship.body.position.y, s: 0})
+      .to({x: pos2.x, y: pos2.y, s: 100}, 125)
+      .easing(Tween.Easing.Quadratic.Out)
+      .onUpdate(function () {
+        Matter.Body.setPosition(ship.body, Matter.Vector.create(this.x, this.y));
+      })
+      .onComplete(function () {
+      })
+      .start();
+    const scale = new Tween.Tween({s: .5})
+      .to({s: 12.4}, 125)
+      .easing(Tween.Easing.Quadratic.Out)
+      .onUpdate(function () {
+        ship.sprite.scale.set(1.5, this.s);
+      })
+      .onComplete(function () {
+      });
+    const scale2 = new Tween.Tween({s: 12.4, z: 0})
+      .to({s: 1.5, z: .5}, 125)
+      .easing(Tween.Easing.Quadratic.Out)
+      .onUpdate(function () {
+        ship.sprite.scale.set(1.5, this.s);
+        ship.sprite.anchor.set(.5, this.z);
+      })
+      .onComplete(function () {
+        ship.sprite.anchor.set(.5, .5);
+        Matter.World.add(ship.game.engine.world, [ship.body]);
+        ship.warping = false;
+      });
+    scale.chain(scale2);
+    scale.start();
+  }
   
   fireMissile() {
     
-    if (this.missiles.length < 8) {
+    if (this.missiles.length < 5) {
       this.missiles.push(new Missile(this.game, this, this.other));
-      this.useEnergy(2);
+      this.useEnergy(3);
     }
   }
 

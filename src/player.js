@@ -14,6 +14,7 @@ class Player {
 
     this.down = (e) => {
 
+      e.preventDefault();
       const action = this.controls[e.key] || this.controls[e.code];
       if (this.keys[action]) {
         return false;
@@ -21,12 +22,14 @@ class Player {
       if (action) {
         this.keys[action] = true;
         this.held[action] = 0;
-        if (action === 'missile' && this.ship.energy >= 2) {
+        if (action === 'missile' && this.ship.energy >= 3) {
           this.ship.fireMissile();
         } else if (action === 'laser' && this.ship.energy >= 4) {
           this.ship.fireBeam();
         } else if (action === 'cloak' && this.ship.energy >= 4) {
-          this.ship.cloak();
+          this.ship.cloakToggle();
+        } else if (action === 'warp' && this.ship.energy >= 2) {
+          this.ship.warp();
         }
       }
     }
@@ -36,9 +39,6 @@ class Player {
       const action = this.controls[e.key] || this.controls[e.code];
       if (action) {
         delete this.keys[action];
-        if (action === 'cloak') {
-          this.ship.unCloak();
-        }
       }
     };
 

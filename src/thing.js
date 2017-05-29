@@ -23,14 +23,14 @@ class Thing {
       return;
     }
     if (this.body.position.x > this.game.width) {
-      Matter.Body.setPosition(this.body, Matter.Vector.create(0, this.body.position.y));
+      Matter.Body.setPosition(this.body, Matter.Vector.create(this.body.position.x - this.game.width, this.body.position.y));
     } else if (this.body.position.x < 0) {
-      Matter.Body.setPosition(this.body, Matter.Vector.create(this.game.width, this.body.position.y));
+      Matter.Body.setPosition(this.body, Matter.Vector.create(this.game.width + this.body.position.x, this.body.position.y));
     }
     if (this.body.position.y > this.game.height) {
-      Matter.Body.setPosition(this.body, Matter.Vector.create(this.body.position.x, 0));
+      Matter.Body.setPosition(this.body, Matter.Vector.create(this.body.position.x, this.body.position.y - this.game.height));
     } else if (this.body.position.y < 0) {
-      Matter.Body.setPosition(this.body, Matter.Vector.create(this.body.position.x, this.game.height));
+      Matter.Body.setPosition(this.body, Matter.Vector.create(this.body.position.x, this.game.height + this.body.position.y));
     }
     this.sprite.position.set(this.body.position.x, this.body.position.y);
     this.sprite.rotation = this.body.angle;
