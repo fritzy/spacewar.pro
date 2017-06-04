@@ -8,87 +8,61 @@ class Player {
 
     this.ship = ship;
     this.game = game;
-    this.keys = {};
     this.controls = controls;
-    this.held = {};
-
-    this.down = (e) => {
-
-      e.preventDefault();
-      const action = this.controls[e.key] || this.controls[e.code];
-      if (this.keys[action]) {
-        return false;
-      }
-      if (action) {
-        this.keys[action] = true;
-        this.held[action] = 0;
-        if (action === 'missile' && this.ship.energy >= 3) {
-          this.ship.fireMissile();
-        } else if (action === 'laser' && this.ship.energy >= 4) {
-          this.ship.fireBeam();
-        } else if (action === 'cloak' && this.ship.energy >= 4) {
-          this.ship.cloakToggle();
-        } else if (action === 'warp' && this.ship.energy >= 2) {
-          this.ship.warp();
-        }
-      }
-    }
-
-    this.up = (e) => {
-
-      const action = this.controls[e.key] || this.controls[e.code];
-      if (action) {
-        delete this.keys[action];
-      }
+    this.keys = this.game.main.input.keys;
+    this.active = {};
+    
+    this.actions = {
+      missile: this.ship.fireMissile.bind(this.ship),
+      laser: this.ship.fireBeam.bind(this.ship),
+      cloak: this.ship.cloakToggle.bind(this.ship),
+      warp: this.ship.warp.bind(this.ship)
     };
 
+  }
 
-    window.addEventListener('keydown', this.down, true);
-    window.addEventListener('keyup', this.up, true);
+
+  down(event) {
+
+    const action = this.controls[event.key] || this.controls[event.code];
+    if (this.keys[action]) return;
+    if (action) {
+      this.active[action] = true;
+      if (this.actions[action]) {
+        this.actions[action]();
+      }
+    }
+  }
+
+  up(event) {
+
+    const action = this.controls[event.key] || this.controls[event.code];
+    if (action) {
+      delete this.active[action];
+    }
   }
 
   update(dt, du) {
 
-    const body = this.ship.body;
-
-    for (let key of Object.keys(this.keys)) {
-      this.held[key] += dt;
-    }
-
-    if (this.keys.addshield) {
+    if (this.active.addshield) {
       this.ship.adjust(1);
-    } else if (this.keys.addenergy) {
+    } else if (this.active.addenergy) {
       this.ship.adjust(-1);
     }
 
-
-    if (this.keys.thrust && this.ship.energy >= 1) {
-      if (this.held.thrust > 1000) {
-        this.held.thrust = 0;
-        //this.ship.useEnergy(1);
-      }
-      Body.applyForce(
-        this.ship.body, body.position,
-        Vector.create(
-          Math.sin(body.angle) * du * .0006,
-          Math.cos(body.angle) * du * -.0006
-        )
-      );
+    if (this.active.thrust && this.ship.energy >= 1) {
+      this.ship.thrust(du);
     }
-    if (this.keys.left && this.ship.energy >= 1) {
-      Body.rotate(body, -.075 * du);
-      Body.setAngularVelocity(body, 0);
+    if (this.active.left && this.ship.energy >= 1) {
+      this.ship.thrustLeft(du);
     }
-    if (this.keys.right && this.ship.energy >= 1) {
-      Body.setAngularVelocity(body, 0);
-      Body.rotate(body, .075 * du);
+    if (this.active.right && this.ship.energy >= 1) {
+      this.ship.thrustRight(du);
     }
   }
 
   destruct() {
 
-    window.removeEventListener('keydown', this.down, true);
-    window.removeEventListener('keyup', this.up, true);
     delete this.ship;
     delete this.game;
   }

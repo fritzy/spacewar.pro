@@ -1,4 +1,6 @@
 const Matter = require('matter-js');
+const PI = Math.PI;
+const PI2 = Math.PI * 2;
 
 class Thing {
 
@@ -19,8 +21,12 @@ class Thing {
    
   update() {
 
-    if (this.destroyed) {
-      return;
+    if (this.destroyed) return;
+
+    if (this.body.angle > PI) {
+      Matter.Body.setAngle(this.body, this.body.angle - PI2);
+    } else if (this.body.angle < -PI) {
+      Matter.Body.setAngle(this.body, this.body.angle + PI2);
     }
     if (this.body.position.x > this.game.width) {
       Matter.Body.setPosition(this.body, Matter.Vector.create(this.body.position.x - this.game.width, this.body.position.y));

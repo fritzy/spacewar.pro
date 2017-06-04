@@ -7,6 +7,7 @@ const Gravity = require('./gravity');
 const Speedcap = require('./speedcap');
 const Matter = require('matter-js');
 const Moon = require('./moon');
+const AI = require('./ai');
 
 class Game extends Scene {
 
@@ -17,9 +18,9 @@ class Game extends Scene {
     this.engine = Matter.Engine.create();
     this.engine.world.gravity.y = 0;
     this.particles = [];
-    Matter.Events.on(this.engine, 'collisionStart', (e) => {
+    Matter.Events.on(this.engine, 'collisionStart', (ev) => {
 
-      for (let col of e.pairs) {
+      for (let col of ev.pairs) {
         col.bodyA.thing.collide(col.bodyB.thing);
         col.bodyB.thing.collide(col.bodyA.thing);
       }
@@ -29,14 +30,6 @@ class Game extends Scene {
   start() {
 
     this.starField = new Starfield(this);
-
-    const kosove = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
-    kosove.frame = new Pixi.Rectangle(60,0,15,14);
-    Pixi.Texture.addToCache(kosove, `kosov-e`);
-    const kosovs = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
-    kosovs.frame = new Pixi.Rectangle(46,46,15,14);
-    Pixi.Texture.addToCache(kosovs, `kosov-s`);
-
     this.ship = new Ship(this, 'ship1', 100, this.height / 2, true);
     this.player = new Player(this, this.ship,
       {
@@ -73,6 +66,12 @@ class Game extends Scene {
         Numpad3: 'warp'
       });
 
+    if (this.settings.aileft) {
+      this.ai = new AI(this, this.ship2, this.ship);
+    }
+    if (this.settings.airight) {
+      this.ai2 = new AI(this, this.ship, this.ship2);
+    }
 
     this.ship.other = this.ship2;
     this.ship2.other = this.ship;
@@ -94,6 +93,18 @@ class Game extends Scene {
     }, 4000);
   }
 
+  up(event, keys) {
+
+    this.player.up(event, keys);
+    this.player2.up(event, keys);
+  }
+
+  down(event, keys) {
+
+    this.player.down(event, keys);
+    this.player2.down(event, keys);
+  }
+
   update(dt, du) {
 
     this.player.update(dt, du);
@@ -107,7 +118,12 @@ class Game extends Scene {
       this.gravity.update(dt, du);
     }
     this.speedcap.update(dt, du);
-    
+    if (this.settings.aileft) {
+      this.ai.update(dt, du);
+    }
+    if (this.settings.airight) {
+      this.ai2.update(dt, du);
+    }
 
     Matter.Engine.update(
       this.engine,

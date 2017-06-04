@@ -67,7 +67,7 @@ class Missile extends Thing {
 
   update (dt, du) {
 
-    super.update();
+    super.update(dt, du);
     if (this.destroyed) {
       return;
     }
@@ -85,11 +85,6 @@ class Missile extends Thing {
 
     this.tsprite.position.set(tpos.x, tpos.y);
     const dist = Math.sqrt(Math.pow(mpos.x - tpos.x, 2) + Math.pow(mpos.y - tpos.y, 2));
-    if (this.body.angle > PI) {
-      Matter.Body.setAngle(this.body, this.body.angle - PI2);
-    } else if (this.body.angle < -PI) {
-      Matter.Body.setAngle(this.body, this.body.angle + PI2);
-    }
     if (dist < 300 && !this.target.cloaking && !this.target.destroyed) {
       tpos = Matter.Vector.sub(Matter.Vector.add(this.target.body.position, Matter.Vector.mult(this.target.body.velocity, dist / 5)), Matter.Vector.mult(this.body.velocity, dist / 5));
       this.tsprite.position.set(tpos.x, tpos.y);

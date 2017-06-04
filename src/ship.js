@@ -5,11 +5,14 @@ const Missile = require('./missile');
 const Bargraph = require('./bargraph');
 const Beam = require('./beam');
 const Particle = require('./particle');
+const Body = Matter.Body;
+const Vector = Matter.Vector;
 
 const PI2 = Math.PI * 2;
 const PI = Math.PI;
 const HPI = Math.PI / 2;
 const Tween = require('tween.js');
+
 
 class Ship extends Thing {
 
@@ -59,10 +62,9 @@ class Ship extends Thing {
   
   update(dt, du) {
 
-    super.update();
-    if (this.destroyed) {
-      return;
-    }
+    super.update(dt, du);
+    if (this.destroyed) return;
+
     this.lastEnergyBump += dt;
     if (this.lastEnergyBump >= 1000) {
       this.lastEnergyBump = 0;
@@ -95,8 +97,9 @@ class Ship extends Thing {
 
   cloakToggle() {
 
-    this.cloaking = !this.cloaking;
-    if (this.cloaking) {
+    if (!this.cloaking) {
+      if (this.energy < 4) return;
+      this.cloaking = true;
       this.cloakTime = 0;
       this.sprite.tint = 0x000000;
       this.useEnergy(4);
@@ -111,12 +114,32 @@ class Ship extends Thing {
     this.sprite.tint = this.color;
   }
 
-  thrust() {
+  thrust(du) {
+
+    Body.applyForce(
+      this.body, this.body.position,
+      Vector.create(
+        Math.sin(this.body.angle) * du * .0006,
+        Math.cos(this.body.angle) * du * -.0006
+      )
+    );
+  }
+
+  thrustLeft(du) {
+
+    Body.rotate(this.body, -.075 * du);
+    Body.setAngularVelocity(this.body, 0);
+  }
+
+  thrustRight(du) { 
+
+    Body.rotate(this.body, .075 * du);
+    Body.setAngularVelocity(this.body, 0);
   }
 
   warp() {
 
-    if (this.warping) return;
+    if (this.warping || this.energy < 2) return;
     this.useEnergy(2);
     Matter.World.remove(this.game.engine.world, [this.body]);
     this.warping = true;
@@ -176,6 +199,7 @@ class Ship extends Thing {
   
   fireMissile() {
     
+    if (this.energy < 3) return;
     if (this.missiles.length < 5) {
       this.missiles.push(new Missile(this.game, this, this.other));
       this.useEnergy(3);
@@ -183,7 +207,9 @@ class Ship extends Thing {
   }
 
   fireBeam() {
-    
+
+    if (this.energy < 2)
+      return;
     if (this.beam === null || this.beam.destroyed) {
       this.beam = new Beam(this.game, this);
       this.useEnergy(2);

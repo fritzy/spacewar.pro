@@ -34,10 +34,9 @@ class Beam extends Thing {
     this.sprite = sprite;
     this.color = this.ship.color;
     Matter.Body.scale(this.body, 2, 2);
-    
     this.life = 0;
   }
-  
+
   update(dt, du) {
 
     super.update(dt, du);
@@ -59,7 +58,7 @@ class Beam extends Thing {
 
     super.collide(other);
     if (other.type === 'SHIP' && other !== this.ship) {
-      other.damage(8);
+      other.damage(4);
       this.destruct();
     } else if (other.type === 'MISSILE') {
       other.destruct();

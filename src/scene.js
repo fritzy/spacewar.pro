@@ -20,6 +20,12 @@ class Scene {
   update(dt) {
 
   }
+
+  up(event, keys) {
+  }
+
+  down(event, keys) {
+  }
 }
 
 module.exports = Scene;

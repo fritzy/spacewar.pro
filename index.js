@@ -3,6 +3,7 @@ const Game = require('./src/game.js');
 const Menu = require('./src/menu.js');
 const Matter = require('matter-js');
 const Tween = require('tween.js');
+const Input = require('./src/input.js');
 
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST;
 const FMS = 1000/60;
@@ -22,6 +23,7 @@ class SpaceWarz {
     this.width = this.app.screen.width;
     this.height = this.app.screen.height;
     this.lastTime = window.performance.now();
+    this.input = new Input(this, this.up.bind(this), this.down.bind(this));
 
     Pixi.loader.add('ship1', 'assets/ship1.png');
     Pixi.loader.add('ship2', 'assets/ship2.png');
@@ -34,10 +36,15 @@ class SpaceWarz {
     Pixi.loader.load((loader, resources) => {
 
       this.resources = resources;
+      const kosove = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosove.frame = new Pixi.Rectangle(60,0,15,14);
+      Pixi.Texture.addToCache(kosove, `kosov-e`);
+      const kosovs = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosovs.frame = new Pixi.Rectangle(46,46,15,14);
+      Pixi.Texture.addToCache(kosovs, `kosov-s`);
       this.startMenu();
       this.update();
     });
-
   }
 
   clear() {
@@ -45,6 +52,16 @@ class SpaceWarz {
     if (this.scene !== null) {
       this.scene.destroy();
     }
+  }
+
+  up(event, keys) {
+
+    this.scene.up(event, keys);
+  }
+
+  down(event, keys) {
+
+    this.scene.down(event, keys);
   }
 
   update(t) {
