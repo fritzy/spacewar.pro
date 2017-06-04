@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack && mkdir -p build/assets && cp index.html ./build && cp assets/* ./build/assets",
+    "build": "webpack --config webpack.deployconfig.js && mkdir -p build/assets && cp index.html ./build && cp assets/* ./build/assets",
     "update": "cd build && aws s3 sync . s3://www.sagebrush.games/spacewar --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --region us-west-2 && cd .."
   },
   "author": "",

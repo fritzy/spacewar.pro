@@ -14,6 +14,7 @@ class Game extends Scene {
   constructor(main, settings) {
 
     super(main);
+    console.log(settings);
     this.settings = settings;
     this.engine = Matter.Engine.create();
     this.engine.world.gravity.y = 0;
@@ -67,10 +68,10 @@ class Game extends Scene {
       });
 
     if (this.settings.aileft) {
-      this.ai = new AI(this, this.ship2, this.ship);
+      this.ai = new AI(this, this.ship, this.ship2);
     }
     if (this.settings.airight) {
-      this.ai2 = new AI(this, this.ship, this.ship2);
+      this.ai2 = new AI(this, this.ship2, this.ship);
     }
 
     this.ship.other = this.ship2;

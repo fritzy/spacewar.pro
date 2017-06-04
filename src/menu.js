@@ -126,7 +126,7 @@ class Menu extends Scene {
     this.airb.on('mousedown', () => {
 
       this.settings.airight = !this.settings.airight;
-      window.localStorage.setItem('sw_aright', this.settings.airight);
+      window.localStorage.setItem('sw_airight', this.settings.airight);
       this.airs.renderable = this.settings.airight;
     });
 
