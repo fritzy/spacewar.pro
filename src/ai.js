@@ -96,7 +96,7 @@ class AI {
     for (let mis of this.target.missiles) {
       const pos = mis.body.position;
       const md = Math.sqrt(Math.pow(mpos.x - pos.x, 2) + Math.pow(mpos.y - pos.y, 2));
-      if (md < 100) {
+      if (md < 65) {
         const a = Vector.angle(mpos, pos);
         let diff = a - this.ship.body.angle + HPI;
         if (diff > PI) {

@@ -47,7 +47,7 @@ class Corner extends AIState {
       return;
     }
 
-    if (Math.abs(diff) > 1 || dist < 50 || Math.abs(sbody.velocity.x) > 7 || Math.abs(sbody.velocity.y) > 7) return;
+    if (Math.abs(diff) > 1 || dist < 50 || Math.abs(sbody.velocity.x) > 6 || Math.abs(sbody.velocity.y) > 6) return;
 
     this.ship.thrust(du);
   }

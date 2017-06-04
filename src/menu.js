@@ -135,10 +135,12 @@ class Menu extends Scene {
       this.main.startGame(this.settings);
     });
 
-} 
-  down() {
+}
+  down(event) {
 
-    this.main.startGame(this.settings);
+    if (event.code === 'Enter' || event.code === 'Space') {
+      this.main.startGame(this.settings);
+    }
   }
 
   update() {

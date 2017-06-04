@@ -22,7 +22,7 @@ class Ship extends Thing {
     const body = Matter.Bodies.circle(x, y, 12, {
       frictionAir: 0,
       frictionStatic: 0,
-      density: .005,
+      density: .01,
     });
     sprite.anchor.set(.5);
     sprite.scale.set(1.5);

@@ -34,15 +34,15 @@ class Missile extends Thing {
         angle: ship.body.angle,
         frictionAir: 0,
         frictionStatic: 0,
-        density: .005,
+        density: .010,
         isSensor: true
       });
     Matter.Body.setVelocity(body,
       Matter.Vector.add(
         ship.body.velocity,
         Matter.Vector.create(
-          Math.sin(ship.body.angle) * 5,
-          Math.cos(ship.body.angle) * -5,
+          Math.sin(ship.body.angle) * 2.5,
+          Math.cos(ship.body.angle) * -2.5,
         )));
 
     super(game, body, sprite, 'MISSILE');
