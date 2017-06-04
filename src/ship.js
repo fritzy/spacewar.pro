@@ -127,14 +127,18 @@ class Ship extends Thing {
 
   thrustLeft(du) {
 
-    Body.rotate(this.body, -.075 * du);
-    Body.setAngularVelocity(this.body, 0);
+    if (!this.warping) {
+      Body.rotate(this.body, -.075 * du);
+      Body.setAngularVelocity(this.body, 0);
+    }
   }
 
   thrustRight(du) { 
 
-    Body.rotate(this.body, .075 * du);
-    Body.setAngularVelocity(this.body, 0);
+    if (!this.warping) {
+      Body.rotate(this.body, .075 * du);
+      Body.setAngularVelocity(this.body, 0);
+    }
   }
 
   warp() {
@@ -165,7 +169,7 @@ class Ship extends Thing {
     );
     const ship = this;
     const anim = new Tween.Tween({x: ship.body.position.x, y: ship.body.position.y, s: 0})
-      .to({x: pos2.x, y: pos2.y, s: 100}, 125)
+      .to({x: pos2.x, y: pos2.y, s: 100}, 200)
       .easing(Tween.Easing.Quadratic.Out)
       .onUpdate(function () {
         Matter.Body.setPosition(ship.body, Matter.Vector.create(this.x, this.y));
@@ -174,7 +178,7 @@ class Ship extends Thing {
       })
       .start();
     const scale = new Tween.Tween({s: .5})
-      .to({s: 12.4}, 125)
+      .to({s: 12.4}, 200)
       .easing(Tween.Easing.Quadratic.Out)
       .onUpdate(function () {
         ship.sprite.scale.set(1.5, this.s);
@@ -230,6 +234,10 @@ class Ship extends Thing {
         new Particle(this.game, pos, pvel, 20 + Math.random() * 50, this.color);
       } while (i < 100);
       this.game.end();
+    }
+
+    if (this.beam) {
+      this.beam.destruct();
     }
 
     for (let missile of this.missiles) {

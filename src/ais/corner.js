@@ -24,6 +24,11 @@ class Corner extends AIState {
     const sbody = this.ship.body;
     let tpos = this.target;
 
+    const epos = this.ai.target.body.position;
+    const edist = Math.sqrt(Math.pow(mpos.x - epos.x, 2) + Math.pow(mpos.y - epos.y, 2));
+    if (edist < 70) {
+      this.ship.warp();
+    }
     const dist = Math.sqrt(Math.pow(mpos.x - tpos.x, 2) + Math.pow(mpos.y - tpos.y, 2));
     this.ai.debug.position.set(tpos.x, tpos.y);
 
