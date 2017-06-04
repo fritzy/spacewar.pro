@@ -141,6 +141,7 @@ class Missile extends Thing {
     super.destruct();
 
     this.tsprite.destroy();
+    this.sprite.destroy();
     this.ship.missiles.splice(this.ship.missiles.indexOf(this), 1);
   }
 

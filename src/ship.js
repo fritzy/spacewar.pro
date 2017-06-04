@@ -59,7 +59,7 @@ class Ship extends Thing {
     this.color = this.sprite.tint;
 
   }
-  
+
   update(dt, du) {
 
     super.update(dt, du);
@@ -133,7 +133,7 @@ class Ship extends Thing {
     }
   }
 
-  thrustRight(du) { 
+  thrustRight(du) {
 
     if (!this.warping) {
       Body.rotate(this.body, .075 * du);
@@ -200,9 +200,9 @@ class Ship extends Thing {
     scale.chain(scale2);
     scale.start();
   }
-  
+
   fireMissile() {
-    
+
     if (this.energy < 3) return;
     if (this.missiles.length < 5) {
       this.missiles.push(new Missile(this.game, this, this.other));
@@ -240,13 +240,13 @@ class Ship extends Thing {
       this.beam.destruct();
     }
 
-    for (let missile of this.missiles) {
-      missile.destruct(true);
+    for (let i = this.missiles.length - 1; i >= 0; --i) {
+      this.missiles[i].destruct();
     }
 
     super.destruct();
     this.missiles = [];;
-    
+
   }
 
   adjust(dir) {
@@ -267,7 +267,7 @@ class Ship extends Thing {
     this.energy -= amt;
     this.energyGraph.draw(this.energy);
   }
-  
+
   damage(dmg) {
     this.shield -= dmg;
     if (this.shield <= 0) {

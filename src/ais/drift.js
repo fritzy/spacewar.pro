@@ -10,6 +10,7 @@ class Drift extends AIState {
   update(dt, du) {
 
     super.update(dt, du);
+    if (this.target.destroyed) return;
     const mpos = this.ship.body.position;
     const tbody = this.target.body;
     const sbody = this.ship.body;

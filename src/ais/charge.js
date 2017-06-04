@@ -11,6 +11,10 @@ class Charge extends AIState {
   update(dt, du) {
 
     super.update(dt, du);
+    if (this.target.destroyed) {
+      this.done = true;
+      return;
+    }
     const mpos = this.ship.body.position;
     const tbody = this.target.body;
     const sbody = this.ship.body;
@@ -19,9 +23,9 @@ class Charge extends AIState {
     const dist = Math.sqrt(Math.pow(mpos.x - tpos.x, 2) + Math.pow(mpos.y - tpos.y, 2));
     tpos = Vector.sub(Vector.add(tpos, Vector.mult(tbody.velocity, dist / 5)), Vector.mult(sbody.velocity, dist / 5));
 
-    let a = Vector.angle(tpos, mpos);
+    let a = Vector.angle(mpos, tpos) - HPI;
 
-    let diff = a - sbody.angle - HPI;
+    let diff = a - sbody.angle;
     if (diff > PI) {
       diff -= PI2;
     } else if (diff < -PI) {
