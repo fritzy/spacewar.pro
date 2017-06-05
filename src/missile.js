@@ -147,15 +147,15 @@ class Missile extends Thing {
     super.destruct();
     this.tsprite.destroy();
     this.sprite.destroy();
-    this.ship.missiles.splice(this.ship.missiles.indexOf(this), 1);
+    this.ship.missiles.delete(this);
   }
 
   collide(other) {
 
     if (other.type !== 'MISSILE' && other.type !== 'BEAM') {
       super.collide(other);
-      this.destruct();
       this.blowUp([this.color, other.color]);
+      this.destruct();
     }
   }
 }

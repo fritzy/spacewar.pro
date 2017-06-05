@@ -26,6 +26,9 @@ class SpaceWarz {
     this.lastTime = window.performance.now();
     this.input = new Input(this, this.up.bind(this), this.down.bind(this));
 
+    this.leftScore = 0;
+    this.rightScore = 0;
+
     Pixi.loader.add('ship1', 'assets/ship1.png');
     Pixi.loader.add('ship2', 'assets/ship2.png');
     Pixi.loader.add('missile1', 'assets/missile.png');
@@ -34,15 +37,50 @@ class SpaceWarz {
     Pixi.loader.add('check', 'assets/check.png');
     Pixi.loader.add('menu', 'assets/menu.png');
     Pixi.loader.add('kosov', 'assets/kosov2.png');
+    Pixi.loader.add('aether', 'assets/aether-v2.png');
     Pixi.loader.load((loader, resources) => {
 
       this.resources = resources;
+
       const kosove = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
       kosove.frame = new Pixi.Rectangle(60,0,15,14);
       Pixi.Texture.addToCache(kosove, `kosov-e`);
+
       const kosovs = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
       kosovs.frame = new Pixi.Rectangle(46,46,15,14);
       Pixi.Texture.addToCache(kosovs, `kosov-s`);
+
+      const kosovp = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosovp.frame = new Pixi.Rectangle(0,46,15,14);
+      Pixi.Texture.addToCache(kosovp, `kosov-p`);
+
+      const kosova = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosova.frame = new Pixi.Rectangle(0,0,15,14);
+      Pixi.Texture.addToCache(kosova, `kosov-a`);
+
+      const kosovc = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosovc.frame = new Pixi.Rectangle(31,0,15,14);
+      Pixi.Texture.addToCache(kosovc, `kosov-c`);
+
+      const kosovw = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosovw.frame = new Pixi.Rectangle(30,60,15,14);
+      Pixi.Texture.addToCache(kosovw, `kosov-w`);
+
+      const kosovr = new Pixi.Texture(this.resources.kosov.texture.baseTexture);
+      kosovr.frame = new Pixi.Rectangle(31,45,15,14);
+      Pixi.Texture.addToCache(kosovr, `kosov-r`);
+
+
+      const loff = [10, 10, 11, 11, 11, 11, 11, 11, 11, 11];
+      let width = 0;
+      for (let i = 0; i < 10; ++i) {
+        const char = new Pixi.Texture(this.resources.aether.texture.baseTexture);
+        char.frame = new Pixi.Rectangle(345 + width, 0, loff[i] + 2,12);
+        Pixi.Texture.addToCache(char, `aether-${i}`);
+        width += loff[i] + 2;
+      }
+
+
       this.startMenu();
       this.update();
     });
@@ -101,12 +139,14 @@ class SpaceWarz {
 
   update(t) {
 
+    t = t || 0;
     Tween.update(t);
     let dt = (t - this.lastTime);
     if (dt > 25) dt = 25;
     const du = dt / (FMS);
     this.lastTime = t;
     this.scene.update(dt, du);
+
     window.requestAnimationFrame(this.update.bind(this));
   }
 

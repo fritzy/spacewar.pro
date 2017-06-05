@@ -46,7 +46,7 @@ class Ship extends Thing {
     this.energyIcon.position.set(left ? 4 : this.game.width - 116, 25);
     this.energyGraph = new Bargraph(game, left ? 20 : this.game.width - 100, 26)
     this.energyGraph.draw(this.energy);
-    this.missiles = [];
+    this.missiles = new Set();
     this.lastEnergyBump = 0;
     this.game.stage.addChild(this.energyIcon);
     this.game.stage.addChild(this.shieldIcon);
@@ -88,8 +88,8 @@ class Ship extends Thing {
         }
       }
     }
-    for (let i = this.missiles.length - 1; i >= 0; i--) {
-      this.missiles[i].update(dt, du);
+    for (let missile of this.missiles) {
+      missile.update(dt, du);
     }
     if (this.beam !== null) {
         this.beam.update(dt, du);
@@ -206,16 +206,16 @@ class Ship extends Thing {
   fireMissile() {
 
     if (this.energy < 3) return;
-    if (this.missiles.length < 5) {
+    if (this.missiles.size < 5) {
       this.sounds.launch.play();
-      this.missiles.push(new Missile(this.game, this, this.other));
+      this.missiles.add(new Missile(this.game, this, this.other));
       this.useEnergy(3);
     }
   }
 
   fireBeam() {
 
-    if (this.energy < 2)
+    if (this.energy < 1)
       return;
     if (this.beam === null || this.beam.destroyed) {
       this.sounds.beam.play();
@@ -239,19 +239,22 @@ class Ship extends Thing {
         let pvel = Matter.Vector.add(vel, Matter.Vector.create(Math.cos(a) * f, Math.sin(a) * f));
         new Particle(this.game, pos, pvel, 20 + Math.random() * 50, this.color);
       } while (i < 100);
-      this.game.end();
+      if (this.left) {
+        this.game.end(0);
+      } else {
+        this.game.end(1);
+      }
     }
 
     if (this.beam) {
       this.beam.destruct();
     }
 
-    for (let i = this.missiles.length - 1; i >= 0; --i) {
-      this.missiles[i].destruct();
+    for (let missile of this.missiles) {
+      missile.destruct();
     }
 
     super.destruct();
-    this.missiles = [];;
 
   }
 
@@ -275,6 +278,9 @@ class Ship extends Thing {
   }
 
   damage(dmg) {
+    if (this.game.settings.invincible) {
+      return;
+    }
     this.shield -= dmg;
     if (this.shield <= 0) {
       this.shield = 0;

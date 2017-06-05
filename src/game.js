@@ -18,6 +18,8 @@ class Game extends Scene {
     this.settings = settings;
     this.engine = Matter.Engine.create();
     this.engine.world.gravity.y = 0;
+    this.ended = false;
+    this.endTime = 0;
     this.particles = [];
     Matter.Events.on(this.engine, 'collisionStart', (ev) => {
 
@@ -88,10 +90,15 @@ class Game extends Scene {
     this.speedcap = new Speedcap(this, 5, 8);
   }
 
-  end() {
-    setTimeout(() => {
-      this.main.startMenu();
-    }, 4000);
+  end(s) {
+    if (!this.ended) {
+      if (s === 0) {
+        this.main.rightScore += 1;
+      } else {
+        this.main.leftScore += 1;
+      }
+    }
+    this.ended = true;
   }
 
   up(event, keys) {
@@ -124,6 +131,12 @@ class Game extends Scene {
     }
     if (this.settings.airight) {
       this.ai2.update(dt, du);
+    }
+    if (this.ended) {
+      this.endTime += dt;
+      if (this.endTime >= 4000) {
+        this.main.startMenu();
+      }
     }
 
     Matter.Engine.update(
