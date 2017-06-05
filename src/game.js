@@ -14,7 +14,7 @@ class Game extends Scene {
   constructor(main, settings) {
 
     super(main);
-    console.log(settings);
+    this.sounds = this.main.sounds;
     this.settings = settings;
     this.engine = Matter.Engine.create();
     this.engine.world.gravity.y = 0;
@@ -22,8 +22,8 @@ class Game extends Scene {
     Matter.Events.on(this.engine, 'collisionStart', (ev) => {
 
       for (let col of ev.pairs) {
-        col.bodyA.thing.collide(col.bodyB.thing);
-        col.bodyB.thing.collide(col.bodyA.thing);
+        col.bodyA.thing.collide(col.bodyB.thing, col.contacts);
+        col.bodyB.thing.collide(col.bodyA.thing, col.contacts);
       }
     });
   }

@@ -1,6 +1,10 @@
 const Thing = require('./thing');
 const Matter = require('matter-js');
 const Pixi = require('pixi.js');
+const Particle = require('./particle');
+
+const PI2 = Math.PI * 2;
+const PI = Math.PI;
 
 class Beam extends Thing {
 
@@ -54,13 +58,25 @@ class Beam extends Thing {
     this.ship.beam = null;
   }
 
-  collide(other) {
+  collide(other, contacts) {
 
     super.collide(other);
     if (other.type === 'SHIP' && other !== this.ship) {
+      const colors = [this.ship.color, other.color];
+      const pos = contacts[Object.keys(contacts)[0]].vertex;
+      let i = 0;
+      do {
+        i++;
+        const a = Math.random() * PI2 - PI;
+        const f = .4 + Math.random() * 2;
+        const pvel = Matter.Vector.create(Math.cos(a) * f, Math.sin(a) * f);
+        new Particle(this.game, pos, pvel, 15 + Math.random() * 30, colors);
+      } while (i < 30);
+      this.game.sounds.beamhit.play();
       other.damage(4);
       this.destruct();
     } else if (other.type === 'MISSILE') {
+      this.game.sounds.beamhit.play();
       other.destruct();
       other.blowUp([this.color, other.color]);
     }

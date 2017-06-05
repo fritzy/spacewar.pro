@@ -124,6 +124,12 @@ class Missile extends Thing {
 
   blowUp(colors) {
 
+    if (Math.floor(Math.random() * 2)) {
+      this.game.sounds.hit.play();
+    } else {
+      this.game.sounds.hit2.play();
+    }
+
     let vel = Matter.Vector.clone(this.body.velocity);
     let pos = Matter.Vector.clone(this.body.position);
     let i = 0;
@@ -139,7 +145,6 @@ class Missile extends Thing {
   destruct() {
 
     super.destruct();
-
     this.tsprite.destroy();
     this.sprite.destroy();
     this.ship.missiles.splice(this.ship.missiles.indexOf(this), 1);

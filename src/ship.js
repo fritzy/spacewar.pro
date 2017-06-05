@@ -29,6 +29,7 @@ class Ship extends Thing {
 
     super(game, body, sprite, 'SHIP');
     this.game = game;
+    this.sounds = this.game.sounds;
 
     this.shield = 30;
     this.cloaking = false;
@@ -144,6 +145,7 @@ class Ship extends Thing {
   warp() {
 
     if (this.warping || this.energy < 2) return;
+    this.sounds.warp.play();
     this.useEnergy(2);
     Matter.World.remove(this.game.engine.world, [this.body]);
     this.warping = true;
@@ -205,6 +207,7 @@ class Ship extends Thing {
 
     if (this.energy < 3) return;
     if (this.missiles.length < 5) {
+      this.sounds.launch.play();
       this.missiles.push(new Missile(this.game, this, this.other));
       this.useEnergy(3);
     }
@@ -215,6 +218,7 @@ class Ship extends Thing {
     if (this.energy < 2)
       return;
     if (this.beam === null || this.beam.destroyed) {
+      this.sounds.beam.play();
       this.beam = new Beam(this.game, this);
       this.useEnergy(2);
     }
@@ -223,6 +227,8 @@ class Ship extends Thing {
   destruct(boom) {
 
     if (boom) {
+      this.sounds.explodeship.play();
+      this.sounds.explode.play();
       let i = 0;
       let pos = Matter.Vector.clone(this.body.position);
       let vel = Matter.Vector.clone(this.body.velocity);
