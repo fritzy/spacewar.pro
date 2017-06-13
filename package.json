@@ -1,13 +1,14 @@
 {
   "name": "spacewar",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "SpaceWar is a game tribute to the 1984 game by the same name. This game has several differences from the original, however.",
   "main": "main.js",
   "scripts": {
     "start": "webpack-dev-server",
     "build-web": "webpack --config webpack.webconfig.js && mkdir -p dist/web/assets && cp index.html ./dist/web && cp assets/* ./dist/web/assets",
-    "build-electron": "webpack --config webpack.config.js && build -w zip -l tar.xz -m zip",
-    "publish-web": "cd dist/web && aws s3 sync . s3://www.sagebrush.games/spacewar --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --region us-west-2 && cd ../.."
+    "build-electron": "webpack --config webpack.config.js && build -w -l -m zip",
+    "publish-web": "cd dist/web && aws s3 sync . s3://www.sagebrush.games/spacewar --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --region us-west-2 && cd ../..",
+    "publish-itch": "butler push dist/linux-unpacked fritzy/spacewar:linux --userversion `node -pe \"require('./package.json').version\"` && butler push dist/win-unpacked fritzy/spacewar:win --userversion `node -pe \"require('./package.json').version\"` && butler push dist/mac fritzy/spacewar:mac   --userversion `node -pe \"require('./package.json').version\"`"
   },
   "author": "Nathan Fritz",
   "license": "UNLICENSED",
