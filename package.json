@@ -1,15 +1,17 @@
 {
-  "name": "spacewarz",
+  "name": "spacewar",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "SpaceWar is a game tribute to the 1984 game by the same name. This game has several differences from the original, however.",
+  "main": "main.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack --config webpack.deployconfig.js && mkdir -p build/assets && cp index.html ./build && cp assets/* ./build/assets",
-    "update": "cd build && aws s3 sync . s3://www.sagebrush.games/spacewar --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --region us-west-2 && cd .."
+    "build-web": "webpack --config webpack.webconfig.js && mkdir -p dist/web/assets && cp index.html ./dist/web && cp assets/* ./dist/web/assets",
+    "build-electron": "webpack --config webpack.config.js && build -w zip -l tar.xz -m zip",
+    "publish-web": "cd dist/web && aws s3 sync . s3://www.sagebrush.games/spacewar --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --region us-west-2 && cd ../.."
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Nathan Fritz",
+  "license": "UNLICENSED",
+  "private": true,
   "dependencies": {
     "howler": "^2.0.3",
     "matter-js": "^0.12.0",
@@ -18,7 +20,21 @@
   },
   "devDependencies": {
     "babili-webpack-plugin": "^0.1.1",
+    "electron": "^1.6.10",
+    "electron-builder": "^18.6.2",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
+  },
+  "build": {
+    "appId": "pro.spacewar",
+    "mac": {
+      "category": "pro.spacewar.game.arcade"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "out.js",
+      "assets"
+    ]
   }
 }
