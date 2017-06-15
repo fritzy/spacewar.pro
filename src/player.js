@@ -24,7 +24,7 @@ class Player {
 
   down(event) {
 
-    const action = this.controls[event.key] || this.controls[event.code];
+    const action = this.controls[event.key] || this.controls[event.code] || this.controls[event.btn];
     if (this.keys[action]) return;
     if (action) {
       this.active[action] = true;
@@ -36,7 +36,7 @@ class Player {
 
   up(event) {
 
-    const action = this.controls[event.key] || this.controls[event.code];
+    const action = this.controls[event.key] || this.controls[event.code] || this.controls[event.btn];
     if (action) {
       delete this.active[action];
     }

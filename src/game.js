@@ -44,7 +44,16 @@ class Game extends Scene {
         e: 'addenergy',
         c: 'laser',
         x: 'cloak',
-        z: 'warp'
+        z: 'warp',
+        '0.14': 'left',
+        '0.15': 'right',
+        '0.12': 'thrust',
+        '0.2': 'missile',
+        '0.4': 'addshield',
+        '0.5': 'addenergy',
+        '0.0': 'laser',
+        '0.3': 'warp',
+        '0.1': 'cloak'
       });
     this.ship2 = new Ship(this, 'ship2', this.width - 100, this.height / 2);
     this.player2 = new Player(this, this.ship2,

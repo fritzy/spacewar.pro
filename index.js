@@ -146,6 +146,7 @@ class SpaceWarz {
     const du = dt / (FMS);
     this.lastTime = t;
     this.scene.update(dt, du);
+    this.input.update(dt, du);
 
     window.requestAnimationFrame(this.update.bind(this));
   }
