@@ -232,6 +232,7 @@ class Menu extends Scene {
 
   toggleGravity() {
 
+    this.main.sounds.beamhit.play();
     this.settings.gravity = !this.settings.gravity;
     window.localStorage.setItem('sw_gravity', this.settings.gravity);
     this.gravs.renderable = this.settings.gravity;
@@ -239,6 +240,7 @@ class Menu extends Scene {
 
   togglePlanet() {
 
+    this.main.sounds.beamhit.play();
     this.settings.planet = !this.settings.planet;
     window.localStorage.setItem('sw_planet', this.settings.planet);
     this.plans.renderable = this.settings.planet;
@@ -246,6 +248,7 @@ class Menu extends Scene {
 
   toggleSound() {
 
+    this.main.sounds.beamhit.play();
     this.settings.sound = !this.settings.sound;
     window.localStorage.setItem('sw_sound', this.settings.sound);
     this.sounds.renderable = this.settings.sound;
@@ -254,6 +257,7 @@ class Menu extends Scene {
 
   toggleSeek() {
 
+    this.main.sounds.beamhit.play();
     this.settings.mseek = !this.settings.mseek;
     window.localStorage.setItem('sw_mseek', this.settings.mseek);
     this.misss.renderable = this.settings.mseek;
@@ -262,25 +266,30 @@ class Menu extends Scene {
   down(event) {
 
     if (event.key === 's' || (event.btn && event.btn.substr(-3) === '.13')) {
+      this.main.sounds.beamhit.play();
       this.pointerPos += 1;
       if (this.pointerPos >= this.pointerPoses.length) {
         this.pointerPos = 0;
       }
     } else if (event.key === 'w' || (event.btn && event.btn.substr(-3) === '.12')) {
+      this.main.sounds.beamhit.play();
       this.pointerPos -= 1;
       if (this.pointerPos < 0) {
         this.pointerPos = this.pointerPoses.length - 1;
       }
     } else if (event.code === 'Enter' || event.code === 'Space' || (event.hit !== '14' && event.hit !== '15')) {
       if (this.pointerPos === 0) {
+        this.main.sounds.beamhit.play();
         this.settings.airight = true;
         this.settings.aileft = false;
         this.main.startGame(this.settings);
       } else if (this.pointerPos === 1) {
+        this.main.sounds.beamhit.play();
         this.settings.airight = false;
         this.settings.aileft = false;
         this.main.ready2P(this.settings);
       }else if (this.pointerPos === 2) {
+        this.main.sounds.beamhit.play();
         this.settings.airight = true;
         this.settings.aileft = true;
         this.main.startGame(this.settings);

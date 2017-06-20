@@ -106,6 +106,7 @@ class Ready2P extends Scene {
 
     if (ctrlText) {
       if (!this.leftReady) {
+        this.main.sounds.beamhit.play();
         this.leftReady = true;
         this.leftCtrls = ctrls;
         this.leftText = ctrlText;
@@ -130,6 +131,7 @@ class Ready2P extends Scene {
 
       } else if (!this.rightReady && this.leftText !== ctrlText) {
 
+        this.main.sounds.beamhit.play();
         this.rightReady = true;
         this.rightCtrls = ctrls;
         this.rightText = ctrlText;
@@ -153,6 +155,7 @@ class Ready2P extends Scene {
         slide.start();
 
       } else if (this.leftReady && this.rightReady) {
+        this.main.sounds.beamhit.play();
         this.main.startGame(this.settings, this.leftCtrls, this.rightCtrls);
         return;
       }
