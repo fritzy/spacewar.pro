@@ -11,7 +11,7 @@ const AI = require('./ai');
 
 class Game extends Scene {
 
-  constructor(main, settings) {
+  constructor(main, settings, left, right) {
 
     super(main);
     this.sounds = this.main.sounds;
@@ -28,61 +28,64 @@ class Game extends Scene {
         col.bodyB.thing.collide(col.bodyA.thing, col.contacts);
       }
     });
+
+    this.left = left || {
+      w: 'thrust',
+      a: 'left',
+      d: 'right',
+      s: 'missile',
+      q: 'addshield',
+      e: 'addenergy',
+      c: 'laser',
+      x: 'cloak',
+      z: 'warp',
+      '0.14': 'left',
+      '0.15': 'right',
+      '0.12': 'thrust',
+      '0.2': 'missile',
+      '0.4': 'addshield',
+      '0.5': 'addenergy',
+      '0.0': 'laser',
+      '0.3': 'warp',
+      '0.1': 'cloak',
+      i: 'thrust',
+      j: 'left',
+      l: 'right',
+      k: 'missile',
+      u: 'addshield',
+      o: 'addenergy',
+      m: 'laser',
+      ',': 'cloak',
+      '.': 'warp',
+      Numpad7: 'addshield',
+      Numpad8: 'thrust',
+      Numpad9: 'addenergy',
+      Numpad4: 'left',
+      Numpad5: 'missile',
+      Numpad6: 'right',
+      Numpad1: 'laser',
+      Numpad2: 'cloak',
+      Numpad3: 'warp'
+    };
+    this.right = right || left;
+
   }
 
   start() {
 
     this.starField = new Starfield(this);
     this.ship = new Ship(this, 'ship1', 100, this.height / 2, true);
-    this.player = new Player(this, this.ship,
-      {
-        w: 'thrust',
-        a: 'left',
-        d: 'right',
-        s: 'missile',
-        q: 'addshield',
-        e: 'addenergy',
-        c: 'laser',
-        x: 'cloak',
-        z: 'warp',
-        '0.14': 'left',
-        '0.15': 'right',
-        '0.12': 'thrust',
-        '0.2': 'missile',
-        '0.4': 'addshield',
-        '0.5': 'addenergy',
-        '0.0': 'laser',
-        '0.3': 'warp',
-        '0.1': 'cloak'
-      });
     this.ship2 = new Ship(this, 'ship2', this.width - 100, this.height / 2);
-    this.player2 = new Player(this, this.ship2,
-      {
-        i: 'thrust',
-        j: 'left',
-        l: 'right',
-        k: 'missile',
-        u: 'addshield',
-        o: 'addenergy',
-        m: 'laser',
-        ',': 'cloak',
-        '.': 'warp',
-        Numpad7: 'addshield',
-        Numpad8: 'thrust',
-        Numpad9: 'addenergy',
-        Numpad4: 'left',
-        Numpad5: 'missile',
-        Numpad6: 'right',
-        Numpad1: 'laser',
-        Numpad2: 'cloak',
-        Numpad3: 'warp'
-      });
 
     if (this.settings.aileft) {
       this.ai = new AI(this, this.ship, this.ship2);
+    } else {
+      this.player = new Player(this, this.ship, this.left);
     }
     if (this.settings.airight) {
       this.ai2 = new AI(this, this.ship2, this.ship);
+    } else {
+      this.player2 = new Player(this, this.ship2, this.right);
     }
 
     this.ship.other = this.ship2;
@@ -112,20 +115,32 @@ class Game extends Scene {
 
   up(event, keys) {
 
-    this.player.up(event, keys);
-    this.player2.up(event, keys);
+    if (this.player) {
+      this.player.up(event, keys);
+    }
+    if (this.player2) {
+      this.player2.up(event, keys);
+    }
   }
 
   down(event, keys) {
 
-    this.player.down(event, keys);
-    this.player2.down(event, keys);
+    if (this.player) {
+      this.player.down(event, keys);
+    }
+    if (this.player2) {
+      this.player2.down(event, keys);
+    }
   }
 
   update(dt, du) {
 
-    this.player.update(dt, du);
-    this.player2.update(dt, du);
+    if (this.player) {
+      this.player.update(dt, du);
+    }
+    if (this.player2) {
+      this.player2.update(dt, du);
+    }
     this.ship.update(dt, du);
     this.ship2.update(dt, du);
     for (let i = this.particles.length - 1; i >= 0; --i) {
@@ -150,15 +165,19 @@ class Game extends Scene {
 
     Matter.Engine.update(
       this.engine,
-      //this.app.ticker.elapsedMS
       dt
     );
   }
 
   destroy() {
 
-    this.player.destruct();
-    this.player2.destruct();
+    if (this.player) {
+      this.player.destruct();
+    }
+
+    if (this.player2) {
+      this.player2.destruct();
+    }
     for (let particle of this.particles) {
       particle.destroy();
     }

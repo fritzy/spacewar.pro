@@ -1,6 +1,6 @@
 {
   "name": "spacewar",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "SpaceWar is a game tribute to the 1984 game by the same name. This game has several differences from the original, however.",
   "main": "main.js",
   "scripts": {

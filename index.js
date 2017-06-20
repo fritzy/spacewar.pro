@@ -5,6 +5,7 @@ const Matter = require('matter-js');
 const Tween = require('tween.js');
 const Input = require('./src/input.js');
 const Howler = require('howler');
+const Ready2P = require('./src/ready2p');
 
 Pixi.settings.SCALE_MODE = Pixi.SCALE_MODES.NEAREST;
 const FMS = 1000/60;
@@ -38,6 +39,7 @@ class SpaceWarz {
     Pixi.loader.add('menu', 'assets/menu.png');
     Pixi.loader.add('kosov', 'assets/kosov2.png');
     Pixi.loader.add('aether', 'assets/aether-v2.png');
+    Pixi.loader.add('ready2p', 'assets/ready2p.png');
     Pixi.loader.load((loader, resources) => {
 
       this.resources = resources;
@@ -158,10 +160,17 @@ class SpaceWarz {
     this.scene.start();
   }
 
-  startGame(settings) {
+  startGame(settings, left, right) {
 
     this.clear();
-    this.scene = new Game(this, settings);
+    this.scene = new Game(this, settings, left, right);
+    this.scene.start();
+  }
+
+  ready2P(settings) {
+
+    this.clear();
+    this.scene = new Ready2P(this, settings);
     this.scene.start();
   }
 }

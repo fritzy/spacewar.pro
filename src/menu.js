@@ -2,7 +2,6 @@ const Pixi = require('pixi.js');
 const Scene = require('./scene');
 const Starfield = require('./starfield');
 const Game = require('./game');
-const Tween = require('tween.js');
 
 class Menu extends Scene {
 
@@ -159,7 +158,7 @@ class Menu extends Scene {
 
       this.settings.airight = false;
       this.settings.aileft = false;
-      this.main.startGame(this.settings);
+      this.main.ready2P(this.settings);
     });
 
     this.startai.on('mousedown', () => {
@@ -272,7 +271,7 @@ class Menu extends Scene {
       if (this.pointerPos < 0) {
         this.pointerPos = this.pointerPoses.length - 1;
       }
-    } else if (event.code === 'Enter' || event.code === 'Space' || event.btn) {
+    } else if (event.code === 'Enter' || event.code === 'Space' || (event.hit !== '14' && event.hit !== '15')) {
       if (this.pointerPos === 0) {
         this.settings.airight = true;
         this.settings.aileft = false;
@@ -280,7 +279,7 @@ class Menu extends Scene {
       } else if (this.pointerPos === 1) {
         this.settings.airight = false;
         this.settings.aileft = false;
-        this.main.startGame(this.settings);
+        this.main.ready2P(this.settings);
       }else if (this.pointerPos === 2) {
         this.settings.airight = true;
         this.settings.aileft = true;

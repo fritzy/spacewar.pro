@@ -48,9 +48,9 @@ class Input {
         for (let bidx in gp.buttons) {
           const btn = `${gp.index}.${bidx}`;
           if (gp.buttons[bidx].pressed && !this.keys[btn]) {
-            this.down({ btn });
+            this.down({ btn, gp: gp.index, hit: bidx });
           } else if (this.keys[btn] && !gp.buttons[bidx].pressed) {
-            this.up({ btn });
+            this.up({ btn, gp: gp.index, hit: bidx });
           }
         }
       }
