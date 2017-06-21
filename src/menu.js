@@ -265,13 +265,16 @@ class Menu extends Scene {
 
   down(event) {
 
-    if (event.key === 's' || (event.btn && event.btn.substr(-3) === '.13')) {
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+    if (event.key === 's' || event.code === 'ArrowDown' || (event.btn && event.btn.substr(-3) === '.13')) {
       this.main.sounds.beamhit.play();
       this.pointerPos += 1;
       if (this.pointerPos >= this.pointerPoses.length) {
         this.pointerPos = 0;
       }
-    } else if (event.key === 'w' || (event.btn && event.btn.substr(-3) === '.12')) {
+    } else if (event.key === 'w' || event.code === 'ArrowUp' || (event.btn && event.btn.substr(-3) === '.12')) {
       this.main.sounds.beamhit.play();
       this.pointerPos -= 1;
       if (this.pointerPos < 0) {
