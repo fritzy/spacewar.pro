@@ -8,6 +8,7 @@ const Speedcap = require('./speedcap');
 const Matter = require('matter-js');
 const Moon = require('./moon');
 const AI = require('./ai');
+const Tween = require('tween.js');
 
 class Game extends Scene {
 
@@ -21,6 +22,19 @@ class Game extends Scene {
     this.ended = false;
     this.endTime = 0;
     this.particles = [];
+
+    this.instructions = new PIXI.Text("USE W,A,S,D For Controls\nScroll Down to See More", {
+      fontFamily : 'Monospace',
+      fontSize: 30, 
+      fill : 0xFFFFFF,
+      fontWeight: 'bold',
+      align : 'center'}
+    );
+    this.instructions.position.set(-this.instructions.width / 2, 400);
+    this.instructions.anchor.set(.5);
+    this.stage.addChild(this.instructions);
+
+
     Matter.Events.on(this.engine, 'collisionStart', (ev) => {
 
       for (let col of ev.pairs) {
@@ -103,6 +117,7 @@ class Game extends Scene {
   }
 
   end(s) {
+
     if (!this.ended) {
       if (s === 0) {
         this.main.rightScore += 1;
@@ -125,6 +140,27 @@ class Game extends Scene {
 
   down(event, keys) {
 
+    if (event.code.substr(0, 5) === 'Arrow' && Tween.getAll().length === 0) {
+      const pos = { x: this.instructions.width / -2 };
+      const slideIn = new Tween.Tween(pos)
+      .to({ x: this.instructions.width / 2 + 20 }, 500)
+      .onUpdate(() => {
+        this.instructions.position.x = pos.x;
+      })
+      .easing(Tween.Easing.Quadratic.In);
+      const slideBack = new Tween.Tween(pos)
+      .to({ x: this.instructions.width  / -2 }, 500)
+      .delay(3000)
+      .onUpdate(() => {
+        this.instructions.position.x = pos.x;
+      })
+      .easing(Tween.Easing.Quadratic.In);
+      slideIn.chain(slideBack);
+      slideIn.start();
+      event.preventDefault();
+
+      return;
+    }
     if (this.player) {
       this.player.down(event, keys);
     }
@@ -171,6 +207,7 @@ class Game extends Scene {
 
   destroy() {
 
+    Tween.removeAll();
     if (this.player) {
       this.player.destruct();
     }
