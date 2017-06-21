@@ -14,6 +14,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "babel-preset-babili": "^0.1.4",
     "howler": "^2.0.3",
     "matter-js": "^0.12.0",
     "pixi.js": "^4.5.2",
