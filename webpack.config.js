@@ -6,11 +6,11 @@ module.exports = {
     app: ["./index.js"]
   },
   output: {
-    path: path.resolve(__dirname, "./build"),
+    path: path.resolve(__dirname, "build"),
     //publicPath: "/assets/",
     filename: "out.js"
   },
   plugins: [
-    //new BabiliPlugin()
+    new BabiliPlugin()
   ]
 };

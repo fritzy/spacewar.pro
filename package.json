@@ -1,12 +1,12 @@
 {
   "name": "spacewar",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "SpaceWar is a game tribute to the 1984 game by the same name. This game has several differences from the original, however.",
   "main": "main.js",
   "scripts": {
     "start": "webpack-dev-server",
     "build-web": "webpack --config webpack.webconfig.js && mkdir -p dist/web/assets && cp webindex.html ./dist/web/index.html && cp assets/* ./dist/web/assets",
-    "build-electron": "webpack --config webpack.config.js && build -w -l -m zip",
+    "build-electron": "webpack --config webpack.config.js && cp build/out.js . && build -w -l -m zip",
     "publish-web": "cd dist/web && aws s3 sync . s3://spacewar.pro --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --region us-east-1 && cd ../..",
     "publish-itch": "butler push dist/linux-unpacked fritzy/spacewar:linux --userversion `node -pe \"require('./package.json').version\"` && butler push dist/win-unpacked fritzy/spacewar:win --userversion `node -pe \"require('./package.json').version\"` && butler push dist/mac fritzy/spacewar:mac   --userversion `node -pe \"require('./package.json').version\"`"
   },
