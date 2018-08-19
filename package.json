@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "babili-webpack-plugin": "^0.1.2",
-    "electron": "^1.8.0",
-    "electron-builder": "^19.27.7",
+    "electron": "^2.0.7",
+    "electron-builder": "^20.28.1",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
   },
