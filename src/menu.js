@@ -193,7 +193,7 @@ class Menu extends Scene {
       rightScoreC.addChild(sprite);
     }
     rightScoreC.position.set(330, 390);
-     
+
 
 
     this.leftShip = new Pixi.Sprite(this.resources.ship1.texture);

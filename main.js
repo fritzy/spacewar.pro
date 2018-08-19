@@ -1,3 +1,6 @@
+// This file is only used for the electron (desktop) application.
+// All it does is manage the game window, and is essentially the default template app for Electron.
+
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')

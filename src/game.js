@@ -25,7 +25,7 @@ class Game extends Scene {
 
     this.instructions = new PIXI.Text("USE W,A,S,D For Controls\nScroll Down to See More", {
       fontFamily : 'Monospace',
-      fontSize: 30, 
+      fontSize: 30,
       fill : 0xFFFFFF,
       fontWeight: 'bold',
       align : 'center'}
@@ -62,6 +62,15 @@ class Game extends Scene {
       '0.0': 'laser',
       '0.3': 'warp',
       '0.1': 'cloak',
+      '1.14': 'left',
+      '1.15': 'right',
+      '1.12': 'thrust',
+      '1.2': 'missile',
+      '1.4': 'addshield',
+      '1.5': 'addenergy',
+      '1.0': 'laser',
+      '1.3': 'warp',
+      '1.1': 'cloak',
       i: 'thrust',
       j: 'left',
       l: 'right',
@@ -140,7 +149,7 @@ class Game extends Scene {
 
   down(event, keys) {
 
-    if (event.code.substr(0, 5) === 'Arrow' && Tween.getAll().length === 0) {
+    if (event.code && event.code.substr(0, 5) === 'Arrow' && Tween.getAll().length === 0) {
       const pos = { x: this.instructions.width / -2 };
       const slideIn = new Tween.Tween(pos)
       .to({ x: this.instructions.width / 2 + 20 }, 500)
