@@ -205,6 +205,7 @@ class Game extends Scene {
       this.endTime += dt;
       if (this.endTime >= 4000) {
         this.main.startMenu();
+        return;
       }
     }
 

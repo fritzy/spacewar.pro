@@ -145,8 +145,12 @@ class Missile extends Thing {
   destruct() {
 
     super.destruct();
-    this.tsprite.destroy();
-    this.sprite.destroy();
+    if (this.tsprite.parent) {
+      this.tsprite.destroy();
+    }
+    if (this.sprite.parent) {
+      this.sprite.destroy();
+    }
     this.ship.missiles.delete(this);
   }
 

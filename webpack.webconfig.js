@@ -1,5 +1,4 @@
 const path = require("path");
-const BabiliPlugin = require("babili-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -9,8 +8,5 @@ module.exports = {
     path: path.resolve(__dirname, "dist/web"),
     //publicPath: "/assets/",
     filename: "out.js"
-  },
-  plugins: [
-    new BabiliPlugin()
-  ]
+  }
 };
